@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Cinema Guide</string>
+    <string name="image_url">"http://image.tmdb.org/t/p/w185/"</string>
+    <string name="BASE_URL">"http://api.themoviedb.org/3/movie/"</string>
+    <string name="API_KEY">"Enter yor API KEY"</string>
+    <string name="top_rated">top_rated</string>
+    <string name="popular">popular</string>
+    <string name="results">results</string>
+    <string name="PosterPath">poster_path</string>
+    <string name="MovieID">movie_Id</string>
+    <string name="ID">id</string>
+    <string name="MovieTitle">title</string>
+    <string name="AverageScore">vote_average</string>
+    <string name="Synopsis">overview</string>
+    <string name="releaseDate">release_date</string>
+    <string name="param_api_key">"?api_key="</string>
+    <string name="param_page_num">\u0026page=</string>
+    <string name="TotalPages">total_pages</string>
+    <string name="resultsTypeDetails">details</string>
+    <string name="resultsTypeLists">list</string>
+</resources>
