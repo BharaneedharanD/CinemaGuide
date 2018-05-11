@@ -1,5 +1,7 @@
 package com.bharanee.android.cinemaguide;
 
+import java.util.ArrayList;
+
 class MovieXtraDetails {
     public String getMovieTitle() {
         return movieTitle;
@@ -41,9 +43,36 @@ class MovieXtraDetails {
         this.averageVote = averageVote;
     }
 
+    public String getBackdropImage() {
+        return backdropImage;
+    }
+
+    public void setBackdropImage(String backdropImage) {
+        this.backdropImage = backdropImage;
+    }
+
     private String movieTitle;
     private String posterImage;
     private String releaseData;
     private String synopsis;
     private double averageVote;
+    private String backdropImage;
+    private ArrayList<String> videos=new ArrayList<>();
+    private ArrayList<String> reviews=new ArrayList<>();
+
+    public ArrayList<String> getReviews() {
+        return reviews;
+    }
+
+    public void addReviews(String review) {
+        this.reviews.add(review);
+    }
+
+    public ArrayList<String> getVideos() {
+        return videos;
+    }
+
+    public void addVideos(String values) {
+        this.videos.add(values);
+    }
 }

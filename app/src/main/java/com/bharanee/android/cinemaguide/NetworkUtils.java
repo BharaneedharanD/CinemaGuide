@@ -33,7 +33,7 @@ public MovieDetails[] getJson(String sort_type,Context context){
     result=null;
     try {
         URL url=new URL(urlstring);
-        execute(url,context.getString(R.string.resultsTypeLists),context);
+        execute(url,context.getString(R.string.resultsTypeLists),context,null);
     } catch (MalformedURLException e) {
         e.printStackTrace();
     }finally {
@@ -46,15 +46,33 @@ public MovieXtraDetails getDetails(int movieId,Context context){
             movieId+context.getResources().getString(R.string.param_api_key)+context.getResources().getString(R.string.API_KEY);
     try{
         URL url=new URL(urlString);
-        execute(url,context.getString(R.string.resultsTypeDetails),context);
+        execute(url,context.getString(R.string.resultsTypeDetails),context,null);
+
     }catch (MalformedURLException e){e.printStackTrace();}
         finally {
         return movieXtraDetails;
     }
 
 }
+public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails movieObject){
+        String urlString=context.getString(R.string.BASE_URL)
+                +movieId
+                +"/reviews"
+                +context.getString(R.string.param_api_key)
+                +context.getString(R.string.API_KEY);
+        try{
+            URL url=new URL(urlString);
+            execute(url,"reviews",context,movieObject);
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+        finally {
+            return movieXtraDetails;
+        }
+}
 
-        protected void execute(URL url, String type, Context context) {
+
+        protected void execute(URL url, String type, Context context,MovieXtraDetails movieObject) {
             URL urlstring=url;
             HttpURLConnection urlConnection=null;
             try {
@@ -70,6 +88,8 @@ public MovieXtraDetails getDetails(int movieId,Context context){
                     getParsedString(scanner.next(),context);
                     else if (type.equals(context.getString(R.string.resultsTypeDetails)))
                      getParsedDetails(scanner.next(),context);
+                    else if (type.equals("reviews"))
+                        getMovieReviews(scanner.next(),context,movieObject);
                 }
             }
             catch (IOException e){e.printStackTrace();}
@@ -79,6 +99,16 @@ public MovieXtraDetails getDetails(int movieId,Context context){
 
 
         }
+
+    private void getMovieReviews(String next, Context context, MovieXtraDetails movieObject) {
+        JsonParserUtil obj=new JsonParserUtil();
+        try {
+             movieXtraDetails=obj.returnReviews(next,context,movieObject);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void getParsedDetails(String next, Context context) {
         JsonParserUtil obj=new JsonParserUtil();

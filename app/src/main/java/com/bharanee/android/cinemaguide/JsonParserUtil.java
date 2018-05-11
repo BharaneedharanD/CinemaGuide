@@ -36,7 +36,25 @@ public class JsonParserUtil {
         movieObject.setPosterImage(jsonObject.getString(context.getResources().getString(R.string.PosterPath)));
         movieObject.setAverageVote(jsonObject.getDouble(context.getResources().getString(R.string.AverageScore)));
         movieObject.setSynopsis(jsonObject.getString(context.getResources().getString(R.string.Synopsis)));
+        movieObject.setBackdropImage(jsonObject.getString("backdrop_path"));
         movieObject.setReleaseData(jsonObject.getString(context.getResources().getString(R.string.releaseDate)));
+
+        //set all trailers video paths
+
         return movieObject;
+    }
+
+    public MovieXtraDetails returnReviews(String next, Context context, MovieXtraDetails movieObject) throws JSONException{
+        MovieXtraDetails object=movieObject;
+        JSONObject jsonObject=new JSONObject(next);
+        JSONArray reviewArrays=jsonObject.getJSONArray(context.getString(R.string.results));
+        for (int i=0;i<reviewArrays.length();i++)
+        {
+            JSONObject movieReview=reviewArrays.getJSONObject(i);
+            object.addReviews(movieReview.getString("content"));
+        }
+
+
+    return object;
     }
 }
