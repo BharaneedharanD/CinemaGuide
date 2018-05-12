@@ -11,7 +11,7 @@
     <FrameLayout
         android:id="@+id/frame_movie_name"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
         <ImageView android:id="@+id/img_backdrop"
@@ -101,22 +101,28 @@
 
         </FrameLayout>
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/layout_videos"
-            android:layout_width="match_parent"
-            android:layout_height="99dp"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
             android:layout_below="@+id/synopsis_layout"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp">
-
+            <TextView
+                android:id="@+id/Video_lbl"
+                android:text="Trailers and Videos "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list_videos"
+                android:layout_below="@+id/Video_lbl"
+                android:layout_marginTop="2dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
-        </FrameLayout>
+        </RelativeLayout>
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/layout_reviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -124,12 +130,44 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp">
-
+            <TextView
+                android:id="@+id/currentPage"
+                android:layout_centerHorizontal="true"
+                tools:text="Current Page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/author_name"
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/currentPage"
+                tools:text="Auhtor Name"
+                android:layout_height="wrap_content" />
+            <ImageButton
+                android:id="@+id/right_review"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:visibility="invisible"
+                android:onClick="movieright"
+                android:background="@drawable/right_arrow"
+                android:layout_alignParentEnd="true"
+                android:layout_height="wrap_content" />
+            <ImageButton
+                android:id="@+id/left_review"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:visibility="invisible"
+                android:onClick="moveleft"
+                android:background="@drawable/left_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/txt_reviews"
+                tools:text="reviews"
+
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </FrameLayout>
+                android:layout_height="wrap_content"
+                android:layout_below="@id/author_name"/>
+        </RelativeLayout>
 
 
 </RelativeLayout>

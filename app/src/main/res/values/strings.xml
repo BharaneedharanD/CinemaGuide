@@ -2,7 +2,8 @@
     <string name="app_name">Cinema Guide</string>
     <string name="image_url">"http://image.tmdb.org/t/p/w185/"</string>
     <string name="BASE_URL">"http://api.themoviedb.org/3/movie/"</string>
-    <string name="API_KEY">"Enter API key here"</string>
+    <string name="API_KEY">"Enter your API here"</string>
+    <string name="YOUTUBE_URL">"https://www.youtube.com/watch?v="</string>
     <string name="top_rated">top_rated</string>
     <string name="popular">popular</string>
     <string name="results">results</string>
@@ -18,4 +19,5 @@
     <string name="TotalPages">total_pages</string>
     <string name="resultsTypeDetails">details</string>
     <string name="resultsTypeLists">list</string>
+    <string name="videoThumbnailUrl">"https://img.youtube.com/vi/"</string>
 </resources>

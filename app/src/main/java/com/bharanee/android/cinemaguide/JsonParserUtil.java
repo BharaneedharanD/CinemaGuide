@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class JsonParserUtil {
 
     public MovieDetails[] returnJson(String str, Context context) throws JSONException {
@@ -51,10 +53,22 @@ public class JsonParserUtil {
         for (int i=0;i<reviewArrays.length();i++)
         {
             JSONObject movieReview=reviewArrays.getJSONObject(i);
-            object.addReviews(movieReview.getString("content"));
+            object.addReviews(movieReview.getString("author")+"-"+movieReview.getString("content"));
         }
 
 
     return object;
+    }
+
+    public ArrayList<String> returnVideos(String next, Context context) throws JSONException{
+        ArrayList<String> moviekeys=new ArrayList<>();
+        JSONObject jsonObject=new JSONObject(next);
+        JSONArray reviewArrays=jsonObject.getJSONArray(context.getString(R.string.results));
+        for (int i=0;i<reviewArrays.length();i++)
+        {
+            JSONObject movieReview=reviewArrays.getJSONObject(i);
+            moviekeys.add(movieReview.getString("key"));
+        }
+    return moviekeys;
     }
 }

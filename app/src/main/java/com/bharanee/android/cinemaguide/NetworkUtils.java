@@ -8,12 +8,14 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class NetworkUtils {
     public int curr_page=1,final_page=0;
     MovieDetails[] result;
     MovieXtraDetails movieXtraDetails=null;
+    ArrayList<String> movieVideoKeys=null;
     private static NetworkUtils networkObject=null;
     private NetworkUtils(){
 
@@ -90,6 +92,8 @@ public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails 
                      getParsedDetails(scanner.next(),context);
                     else if (type.equals("reviews"))
                         getMovieReviews(scanner.next(),context,movieObject);
+                    else if (type.equals("videos"))
+                        getMovies(scanner.next(),context);
                 }
             }
             catch (IOException e){e.printStackTrace();}
@@ -99,6 +103,16 @@ public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails 
 
 
         }
+
+    private void getMovies(String next, Context context) {
+        JsonParserUtil obj=new JsonParserUtil();
+        try {
+            movieVideoKeys=obj.returnVideos(next,context);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void getMovieReviews(String next, Context context, MovieXtraDetails movieObject) {
         JsonParserUtil obj=new JsonParserUtil();
@@ -130,4 +144,20 @@ public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails 
             }
         }
 
+    public ArrayList<String> getVideos(int movieId, Context context) {
+        String urlString=context.getString(R.string.BASE_URL)
+                +movieId
+                +"/videos"
+                +context.getString(R.string.param_api_key)
+                +context.getString(R.string.API_KEY);
+        try{
+            URL url=new URL(urlString);
+            execute(url,"videos",context,null);
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+        finally {
+            return movieVideoKeys;
+        }
+    }
 }
