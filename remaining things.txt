@@ -1,0 +1,4 @@
+1. On start page, set onscroll listener even when navigating back fro details activity
+2. Load data from sqlite to display all movies  
+3. Set proper styles
+4. Change themes and color properly

@@ -24,6 +24,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeActivity"/>
         </activity>
+        <provider
+            android:authorities="com.bharanee.android.cinemaguide"
+            android:name="com.bharanee.android.cinemaguide.MovieContentProvider"
+            android:exported="false"
+            />
     </application>
 
 </manifest>

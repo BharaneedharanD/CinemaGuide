@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -78,7 +79,7 @@
 
         </RelativeLayout>
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/synopsis_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -93,13 +94,22 @@
                 android:id="@+id/tv_synopsis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/image_poster"
                 android:fontFamily="cursive"
                 android:padding="2dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textStyle="italic" />
 
-        </FrameLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_add_favorites"
+                android:layout_below="@id/tv_synopsis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:clickable="true"
+                android:src="@drawable/ic_like_movie"
+                 />
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/layout_videos"

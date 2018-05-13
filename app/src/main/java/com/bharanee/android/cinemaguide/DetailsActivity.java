@@ -1,7 +1,12 @@
 package com.bharanee.android.cinemaguide;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -32,6 +38,8 @@ private RecyclerView rv_videos;
 private BackgroundTasks videoLoad;
 private VideoAdapter videoAdapter;
 private int currentPos=-1;
+private FloatingActionButton likeMovies;
+private boolean isLiked=false;
 private int movie_ID;
 MovieXtraDetails movieXtraDetails=null;
     NetworkUtils networkUtils=null;
@@ -72,7 +80,58 @@ MovieXtraDetails movieXtraDetails=null;
         //videoAdapter.resetDate();
         rv_videos.setAdapter(videoAdapter);
 
+        //Floating Action Button
+         likeMovies=findViewById(R.id.fab_add_favorites);
+        isLiked=containsMovie(movie_ID);
+        if (isLiked)
+            likeMovies.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.colorAccent)) );
+        else
+            likeMovies.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.grey)));
+        likeMovies.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isLiked){
+                    //If the movie is not added to favorites, add it now
+                ContentValues values=new ContentValues();
+                values.put(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_ID,movie_ID);
+                values.put(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_NAME,movieXtraDetails.getMovieTitle());
+                Uri uri=getContentResolver().insert(FavoriteMovieContract.FavoriteMovieEntry.CONTENT_URI,values);
+                if (uri.toString().equals(FavoriteMovieContract.FavoriteMovieEntry.CONTENT_URI+"/"+movie_ID))
+                Toast.makeText(DetailsActivity.this,"Added to Favourites",Toast.LENGTH_SHORT).show();
+                isLiked=true;
+                    likeMovies.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(DetailsActivity.this,R.color.colorAccent)) );
+                }
+                else {
+                    //If the movie is added to favorites, remove it
+                    String movie=movie_ID+"";
+                    Uri uriDelete= FavoriteMovieContract.FavoriteMovieEntry.CONTENT_URI;
+                    uriDelete=uriDelete.buildUpon().appendPath(movie).build();
+                    int result=getContentResolver().delete(uriDelete,null,null);
+                    if (result!=0)
+                    {Toast.makeText(DetailsActivity.this,"Removed from Favourites ",Toast.LENGTH_SHORT).show();
+                    isLiked=false;
+                    likeMovies.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(DetailsActivity.this,R.color.grey)) );
+                    }
 
+                }
+            }
+        });
+
+    }
+
+    private boolean containsMovie(int movie_id) {
+        String movieid=movie_id+"";
+        Uri uriQuery= FavoriteMovieContract.FavoriteMovieEntry.CONTENT_URI;
+        uriQuery=uriQuery.buildUpon().appendPath(movieid).build();
+        Cursor cursor=getContentResolver().query(uriQuery,null,null,null,null);
+
+        if (cursor.moveToFirst()){
+            String id=cursor.getString(cursor.getColumnIndex(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_ID));
+            cursor.close();
+            return (Integer.parseInt(id)==movie_id);
+        }
+        cursor.close();
+        return false;
     }
 
     public void movieright(View view) {
@@ -120,8 +179,8 @@ MovieXtraDetails movieXtraDetails=null;
         }
     }
     public void setdataDetails(MovieXtraDetails movieXtraDetails){
-        Picasso.get().load(getResources().getString(R.string.image_url)+movieXtraDetails.getPosterImage()).placeholder(R.drawable.default_image).into(movie_Poster);
-        Picasso.get().load(getString(R.string.image_url)+movieXtraDetails.getBackdropImage()).placeholder(R.drawable.default_image).into(backdrop_image);
+        Picasso.get().load(getString(R.string.image_url)+movieXtraDetails.getPosterImage()).placeholder(R.drawable.default_image).into(movie_Poster);
+        Picasso.get().load(getString(R.string.backdrop_image_url)+movieXtraDetails.getBackdropImage()).placeholder(R.drawable.default_image).into(backdrop_image);
         movie_Title.setText(movieXtraDetails.getMovieTitle());
         average_Score.setText(String.valueOf(movieXtraDetails.getAverageVote()) );
         String releaseYear=movieXtraDetails.getReleaseData().split("-")[0];

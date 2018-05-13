@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Cinema Guide</string>
     <string name="image_url">"http://image.tmdb.org/t/p/w185/"</string>
+    <string name="backdrop_image_url">"http://image.tmdb.org/t/p/w500/"</string>
     <string name="BASE_URL">"http://api.themoviedb.org/3/movie/"</string>
-    <string name="API_KEY">"Enter your API here"</string>
+    <string name="API_KEY">"Enter your API key"</string>
     <string name="YOUTUBE_URL">"https://www.youtube.com/watch?v="</string>
     <string name="top_rated">top_rated</string>
     <string name="popular">popular</string>
