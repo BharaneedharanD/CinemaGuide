@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/darkGrey"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,8 +13,7 @@
         android:id="@+id/frame_movie_name"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        style="@style/backdrop_image">
         <ImageView android:id="@+id/img_backdrop"
             android:layout_height="match_parent"
             android:layout_width="match_parent"/>
@@ -25,9 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/frame_movie_name"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
+            style="@style/induvidual_layouts">
 
             <ImageView
                 android:id="@+id/image_poster"
@@ -42,9 +39,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_toRightOf="@id/image_poster"
-                android:fontFamily="cursive"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 tools:text="Name" />
 
             <TextView
@@ -53,22 +49,21 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/tv_movie_name"
                 android:layout_centerVertical="true"
-                android:fontFamily="cursive"
+                android:textColor="@color/white"
+
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textStyle="italic"
+
                 tools:text="@string/releaseDate" />
 
             <TextView
                 android:id="@+id/tv_vote_average"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:textColor="@color/white"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="24dp"
-                android:fontFamily="cursive"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textStyle="italic"
                 tools:text="@string/AverageScore" />
 
             <ProgressBar
@@ -84,20 +79,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/image_year_rating"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
+            style="@style/induvidual_layouts"
             android:padding="5dp">
 
             <TextView
-
+                android:textColor="@color/white"
                 android:id="@+id/tv_synopsis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="cursive"
+
                 android:padding="2dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textStyle="italic" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab_add_favorites"
@@ -116,13 +109,13 @@
             android:layout_width="wrap_content"
             android:layout_height="120dp"
             android:layout_below="@+id/synopsis_layout"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
+            style="@style/induvidual_layouts">
             <TextView
                 android:id="@+id/Video_lbl"
                 android:text="Trailers and Videos "
                 android:layout_width="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textColor="@color/white"
                 android:layout_height="wrap_content" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list_videos"
@@ -137,18 +130,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/layout_videos"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
+            style="@style/induvidual_layouts">
             <TextView
                 android:id="@+id/currentPage"
                 android:layout_centerHorizontal="true"
                 tools:text="Current Page"
+                android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/author_name"
                 android:layout_width="wrap_content"
+                android:textColor="@color/white"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:layout_below="@+id/currentPage"
                 tools:text="Auhtor Name"
                 android:layout_height="wrap_content" />
@@ -173,7 +167,8 @@
             <TextView
                 android:id="@+id/txt_reviews"
                 tools:text="reviews"
-
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/author_name"/>

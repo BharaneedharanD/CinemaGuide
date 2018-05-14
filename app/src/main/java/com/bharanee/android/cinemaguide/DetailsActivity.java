@@ -95,6 +95,7 @@ MovieXtraDetails movieXtraDetails=null;
                 ContentValues values=new ContentValues();
                 values.put(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_ID,movie_ID);
                 values.put(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_NAME,movieXtraDetails.getMovieTitle());
+                values.put(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_POSTER_PATH,movieXtraDetails.getPosterImage());
                 Uri uri=getContentResolver().insert(FavoriteMovieContract.FavoriteMovieEntry.CONTENT_URI,values);
                 if (uri.toString().equals(FavoriteMovieContract.FavoriteMovieEntry.CONTENT_URI+"/"+movie_ID))
                 Toast.makeText(DetailsActivity.this,"Added to Favourites",Toast.LENGTH_SHORT).show();

@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class MovieDBHelper extends SQLiteOpenHelper {
-    private static int version=1;
+    private static int version=2;
     public static String DATABASE_NAME="FavoriteMovie.db";
 
 
@@ -18,7 +18,8 @@ public class MovieDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 final String createQuery="CREATE TABLE "+FavoriteMovieContract.FavoriteMovieEntry.TABLE_NAME
         +" ( "+ FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_ID+" INTEGER PRIMARY KEY , "
-        + FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_NAME+" TEXT NOT NULL);";
+        + FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_NAME+" TEXT NOT NULL ,"
+        + FavoriteMovieContract.FavoriteMovieEntry.COLUMN_POSTER_PATH +" TEXT NOT NULL );";
 db.execSQL(createQuery);
 
     }

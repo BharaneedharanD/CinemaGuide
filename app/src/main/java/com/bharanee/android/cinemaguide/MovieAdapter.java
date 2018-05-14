@@ -72,18 +72,21 @@ private final poster_click click_handler;
             return 0;
         else return movielist.size();
     }
-    public void setData(MovieDetails[] result){
+    public void setData(MovieDetails[] result,Boolean isFavourites){
         if (result==null)return;
-        if (movielist==null)movielist=new ArrayList<>();
+        if (movielist==null )movielist=new ArrayList<>();
+        if (isFavourites)movielist=new ArrayList<>();
         for (MovieDetails m:result)
             movielist.add(m);
         notifyDataSetChanged();
 
     }
+
     public void reset(){
         movielist=null;
         NetworkUtils.getNetworkObject().curr_page=1;
         NetworkUtils.getNetworkObject().final_page=0;
+        notifyDataSetChanged();
     }
 
 

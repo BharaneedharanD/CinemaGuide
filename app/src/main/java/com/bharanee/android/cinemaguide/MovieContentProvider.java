@@ -37,11 +37,19 @@ public class MovieContentProvider extends ContentProvider {
         final SQLiteDatabase mDB= movieDBHelper.getReadableDatabase();
         int match=sUriMatcher.match(uri);
         Cursor cursor=null;
-        String movieid=uri.getPathSegments().get(1);
+
         switch (match){
             case MOVIES:
+                cursor=mDB.query(FavoriteMovieContract.FavoriteMovieEntry.TABLE_NAME,
+                        null,
+                        null,
+                       null,
+                        null,
+                        null,
+                        null);
                 break;
             case MOVIES_WITH_ID:
+                String movieid=uri.getPathSegments().get(1);
                 cursor=mDB.query(FavoriteMovieContract.FavoriteMovieEntry.TABLE_NAME,
                         new String[]{FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_ID},
                         FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_ID+" =? ",

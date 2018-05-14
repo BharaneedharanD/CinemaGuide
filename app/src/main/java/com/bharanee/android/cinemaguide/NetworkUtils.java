@@ -43,7 +43,11 @@ public MovieDetails[] getJson(String sort_type,Context context){
     }
 
 }
-public MovieXtraDetails getDetails(int movieId,Context context){
+
+
+
+
+    public MovieXtraDetails getDetails(int movieId,Context context){
     String urlString=context.getResources().getString(R.string.BASE_URL)+
             movieId+context.getResources().getString(R.string.param_api_key)+context.getResources().getString(R.string.API_KEY);
     try{
@@ -56,6 +60,7 @@ public MovieXtraDetails getDetails(int movieId,Context context){
     }
 
 }
+
 public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails movieObject){
         String urlString=context.getString(R.string.BASE_URL)
                 +movieId
@@ -160,4 +165,6 @@ public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails 
             return movieVideoKeys;
         }
     }
+
+
 }
