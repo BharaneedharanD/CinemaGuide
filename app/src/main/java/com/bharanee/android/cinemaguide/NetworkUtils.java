@@ -12,24 +12,24 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class NetworkUtils {
-    public int curr_page=1,final_page=0;
-    MovieDetails[] result;
-    MovieXtraDetails movieXtraDetails=null;
-    ArrayList<String> movieVideoKeys=null;
-    private static NetworkUtils networkObject=null;
+    public static int curr_page=1,final_page=0;
+    private static MovieDetails[] result;
+    private static MovieXtraDetails movieXtraDetails=null;
+    private static ArrayList<String> movieVideoKeys=null;
+    //private static NetworkUtils networkObject=null;
     private NetworkUtils(){
 
     }
-    public static NetworkUtils getNetworkObject(){
+    /*public static NetworkUtils getNetworkObject(){
         if (networkObject==null)
         {networkObject=new NetworkUtils();}
         return networkObject;
-    }
-    public static void resetObject(){
+    }*/
+    /*public static void resetObject(){
         networkObject=null;
 
-    }
-public MovieDetails[] getJson(String sort_type,Context context){
+    }*/
+public static MovieDetails[] getJson(String sort_type,Context context){
      String urlstring=context.getResources().getString(R.string.BASE_URL)+sort_type+context.getResources().getString(R.string.param_api_key)
              +context.getResources().getString(R.string.API_KEY)+context.getResources().getString(R.string.param_page_num)+curr_page;
     result=null;
@@ -47,7 +47,7 @@ public MovieDetails[] getJson(String sort_type,Context context){
 
 
 
-    public MovieXtraDetails getDetails(int movieId,Context context){
+    public static MovieXtraDetails getDetails(int movieId,Context context){
     String urlString=context.getResources().getString(R.string.BASE_URL)+
             movieId+context.getResources().getString(R.string.param_api_key)+context.getResources().getString(R.string.API_KEY);
     try{
@@ -61,7 +61,7 @@ public MovieDetails[] getJson(String sort_type,Context context){
 
 }
 
-public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails movieObject){
+public static MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails movieObject){
         String urlString=context.getString(R.string.BASE_URL)
                 +movieId
                 +"/reviews"
@@ -79,7 +79,7 @@ public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails 
 }
 
 
-        protected void execute(URL url, String type, Context context,MovieXtraDetails movieObject) {
+        protected static void execute(URL url, String type, Context context,MovieXtraDetails movieObject) {
             URL urlstring=url;
             HttpURLConnection urlConnection=null;
             try {
@@ -109,7 +109,7 @@ public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails 
 
         }
 
-    private void getMovies(String next, Context context) {
+    private static void getMovies(String next, Context context) {
         JsonParserUtil obj=new JsonParserUtil();
         try {
             movieVideoKeys=obj.returnVideos(next,context);
@@ -119,7 +119,7 @@ public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails 
         }
     }
 
-    private void getMovieReviews(String next, Context context, MovieXtraDetails movieObject) {
+    private static void getMovieReviews(String next, Context context, MovieXtraDetails movieObject) {
         JsonParserUtil obj=new JsonParserUtil();
         try {
              movieXtraDetails=obj.returnReviews(next,context,movieObject);
@@ -129,7 +129,7 @@ public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails 
         }
     }
 
-    private void getParsedDetails(String next, Context context) {
+    private static void getParsedDetails(String next, Context context) {
         JsonParserUtil obj=new JsonParserUtil();
         try {
             movieXtraDetails= obj.returnDetails(next,context);
@@ -139,7 +139,7 @@ public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails 
         }
     }
 
-    protected void getParsedString(String s, Context context) {
+    protected static void getParsedString(String s, Context context) {
             JsonParserUtil obj=new JsonParserUtil();
             try {
                result= obj.returnJson(s,context);
@@ -149,7 +149,7 @@ public MovieXtraDetails getReviews(int movieId,Context context,MovieXtraDetails 
             }
         }
 
-    public ArrayList<String> getVideos(int movieId, Context context) {
+    public static ArrayList<String> getVideos(int movieId, Context context) {
         String urlString=context.getString(R.string.BASE_URL)
                 +movieId
                 +"/videos"

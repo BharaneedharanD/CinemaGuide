@@ -15,7 +15,7 @@ public class JsonParserUtil {
 
         JSONObject jsonObject=new JSONObject(str);
         int max_pages=jsonObject.getInt(context.getString(R.string.TotalPages));
-        NetworkUtils.getNetworkObject().final_page=max_pages;
+        NetworkUtils.final_page=max_pages;
         JSONArray movieArray = jsonObject.getJSONArray(context.getResources().getString(R.string.results));
 
         parsedresult = new MovieDetails[movieArray.length()];

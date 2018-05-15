@@ -83,9 +83,9 @@ private final poster_click click_handler;
 
     public void reset(){
         movielist=null;
-        NetworkUtils.getNetworkObject().curr_page=1;
-        NetworkUtils.getNetworkObject().final_page=0;
-        notifyDataSetChanged();
+        NetworkUtils.curr_page=1;
+        NetworkUtils.final_page=0;
+        //notifyDataSetChanged();
     }
 
 

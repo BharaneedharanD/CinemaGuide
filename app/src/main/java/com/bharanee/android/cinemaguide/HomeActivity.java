@@ -3,7 +3,9 @@ import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +26,7 @@ public class HomeActivity extends AppCompatActivity implements MovieAdapter.post
 private MovieAdapter adapter;
 private String sort_type;
 private static final int FAVOURITES_LOADER_ID=101;
-private NetworkUtils networkobj=null;
+//private NetworkUtils networkobj=null;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -37,9 +39,9 @@ private NetworkUtils networkobj=null;
         }
         outState.putIntegerArrayList(getString(R.string.MovieID),ids);
         outState.putStringArrayList(getString(R.string.PosterPath),poster_images);
-        outState.putString("sort_type",sort_type);
-        outState.putInt("currentPage",networkobj.curr_page);
-        outState.putInt("lastPage",networkobj.final_page);
+        outState.putString(getString(R.string.sort_type),sort_type);
+        outState.putInt(getString(R.string.currentPage),NetworkUtils.curr_page);
+        outState.putInt(getString(R.string.lastPage),NetworkUtils.final_page);
     }
 
     @Override
@@ -47,13 +49,15 @@ private NetworkUtils networkobj=null;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-         networkobj=NetworkUtils.getNetworkObject();
          sort_type=getResources().getString(R.string.top_rated);
-        GridLayoutManager layoutManager=new GridLayoutManager(HomeActivity.this,2);
+         int spanCount=2;
+         if (getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE)
+             spanCount=3;
+        GridLayoutManager layoutManager=new GridLayoutManager(HomeActivity.this,spanCount);
         adapter=new MovieAdapter(this,HomeActivity.this);
         adapter.reset();
         if (savedInstanceState!=null){
-            String type=savedInstanceState.getString("sort_type");
+            String type=savedInstanceState.getString(getString(R.string.sort_type));
             ArrayList<Integer> mIds=savedInstanceState.getIntegerArrayList(getString(R.string.MovieID));
             ArrayList<String> posterPaths=savedInstanceState.getStringArrayList(getString(R.string.PosterPath));
             MovieDetails[] details=new MovieDetails[mIds.size()];
@@ -63,11 +67,11 @@ private NetworkUtils networkobj=null;
                 m.setPoster_Path(posterPaths.get(i));
                 details[i]=m;
             }
-            NetworkUtils.getNetworkObject().curr_page=savedInstanceState.getInt("currPage");
-            NetworkUtils.getNetworkObject().final_page=savedInstanceState.getInt("lastPage");
-            adapter.setData(details,type.equals("favourites"));
+            NetworkUtils.curr_page=savedInstanceState.getInt(getString(R.string.currentPage));
+            NetworkUtils.final_page=savedInstanceState.getInt(getString(R.string.lastPage));
+            adapter.setData(details,type.equals(getString(R.string.favourites)));
         }else{
-        new getData().execute(networkobj);
+        new getData().execute();
         }
         rv_movies.setLayoutManager(layoutManager);
         rv_movies.setHasFixedSize(true);
@@ -87,12 +91,11 @@ private NetworkUtils networkobj=null;
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            if (dy<0 || sort_type.equals("favourites"))return;
-            NetworkUtils networkObject=NetworkUtils.getNetworkObject();
-            if (lastitemdisplaying(rv_movies)&&networkObject.curr_page<=networkObject.final_page)
+            if (dy<0 || sort_type.equals(getString(R.string.favourites)))return;
+            if (lastitemdisplaying(rv_movies)&& NetworkUtils.curr_page<=NetworkUtils.final_page)
             {
-                networkObject.curr_page++;
-            new getData().execute(networkObject);return;
+                NetworkUtils.curr_page++;
+            new getData().execute();return;
             }
 
         }
@@ -175,16 +178,15 @@ private NetworkUtils networkobj=null;
         adapter.reset();
     }
 ///////////////////////////////////////////////////////////////////////////////
-    class getData extends AsyncTask<NetworkUtils,Void,MovieDetails[]>{
+    class getData extends AsyncTask<Void,Void,MovieDetails[]>{
 
-        @Override
-        protected MovieDetails[] doInBackground(NetworkUtils... networkObj) {
-            NetworkUtils networkConnector=networkObj[0];
-            MovieDetails[] parsed=networkConnector.getJson(sort_type,HomeActivity.this);
-            return parsed;
-        }
+    @Override
+    protected MovieDetails[] doInBackground(Void... voids) {
+        MovieDetails[] parsed=NetworkUtils.getJson(sort_type,HomeActivity.this);
+        return parsed;
+    }
 
-        @Override
+    @Override
         protected void onPostExecute(MovieDetails[] strings) {
 
             adapter.setData(strings,false);
@@ -206,18 +208,20 @@ private NetworkUtils networkobj=null;
                 {
                     adapter.reset();
                     sort_type=getResources().getString(R.string.top_rated);
-                    new getData().execute(networkobj);}
+                    new getData().execute();
+                }
                 break;
             case R.id.popular_menu_id:
                 if (!sort_type.equals(getString(R.string.popular)))
                 {
                     adapter.reset();
                     sort_type=getResources().getString(R.string.popular);
-                    new getData().execute(networkobj);}
+                    new getData().execute();
+                }
                 break;
             case R.id.favourite_menu_id:
-                if (!sort_type.equals("favourites")){
-                    sort_type="favourites";
+                if (!sort_type.equals(getString(R.string.favourites))){
+                    sort_type=getString(R.string.favourites);
                     adapter.reset();
                     if (null==getLoaderManager().getLoader(FAVOURITES_LOADER_ID))
                     getLoaderManager().initLoader(FAVOURITES_LOADER_ID,null,this);

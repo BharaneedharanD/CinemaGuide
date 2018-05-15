@@ -48,7 +48,7 @@ public class DetailsActivity extends AppCompatActivity implements VideoAdapter.v
     private boolean isLiked=false;
     private int movie_ID;
     MovieXtraDetails movieXtraDetails=null;
-    NetworkUtils networkUtils=null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +58,6 @@ public class DetailsActivity extends AppCompatActivity implements VideoAdapter.v
         rightReview.setAlpha(0.4f);
         backdrop_image.setScaleType(ImageView.ScaleType.FIT_XY);
         movie_Poster.setScaleType(ImageView.ScaleType.FIT_START);
-        NetworkUtils.resetObject();
-        networkUtils=NetworkUtils.getNetworkObject();
         Intent movieIntent=getIntent();
         movie_ID=movieIntent.getIntExtra(getString(R.string.MovieID),0);
         //Recycler View
@@ -173,7 +171,7 @@ public class DetailsActivity extends AppCompatActivity implements VideoAdapter.v
 
         @Override
         protected MovieXtraDetails doInBackground(Integer... ints) {
-            movieXtraDetails = networkUtils.getDetails(ints[0], DetailsActivity.this);
+            movieXtraDetails = NetworkUtils.getDetails(ints[0], DetailsActivity.this);
 
             return movieXtraDetails;
         }
@@ -205,7 +203,7 @@ public class DetailsActivity extends AppCompatActivity implements VideoAdapter.v
         @Override
         protected MovieXtraDetails doInBackground(Integer... ints) {
             int movieId=ints[0];
-            movieXtraDetails=networkUtils.getReviews(movieId,DetailsActivity.this,movieXtraDetails);
+            movieXtraDetails=NetworkUtils.getReviews(movieId,DetailsActivity.this,movieXtraDetails);
             return movieXtraDetails;
         }
 

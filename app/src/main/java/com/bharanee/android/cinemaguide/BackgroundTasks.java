@@ -11,17 +11,15 @@ public class BackgroundTasks extends AsyncTask<Integer,Void,ArrayList<String>>{
         ArrayList<String> movieVideoKeys=null;
         public VideoAdapter videoAdapter;
         int movieId;
-        NetworkUtils networkUtils;
         public BackgroundTasks(Context context,int movieId,VideoAdapter adapter) {
             this.context = context;
             this.movieId=movieId;
-            networkUtils=NetworkUtils.getNetworkObject();
             videoAdapter=adapter;
         }
 
         @Override
         protected ArrayList<String> doInBackground(Integer... integers) {
-            movieVideoKeys=networkUtils.getVideos(movieId,context);
+            movieVideoKeys=NetworkUtils.getVideos(movieId,context);
             return movieVideoKeys;
         }
 

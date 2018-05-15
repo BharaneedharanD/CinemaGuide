@@ -12,6 +12,10 @@
     <string name="MovieID">movie_Id</string>
     <string name="ID">id</string>
     <string name="synopsis">synopsis</string>
+    <string name="favourites">favourites</string>
+    <string name="sort_type">sort_type</string>
+    <string name="currentPage">currentPage</string>
+    <string name="lastPage">lastPage</string>
     <string name="MovieTitle">title</string>
     <string name="reviews">reviews</string>
     <string name="videosLists">videoLists</string>
