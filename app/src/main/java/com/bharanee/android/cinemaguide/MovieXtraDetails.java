@@ -67,6 +67,9 @@ class MovieXtraDetails {
     public void addReviews(String review) {
         this.reviews.add(review);
     }
+    public void setReviews(ArrayList<String> reviews){
+        this.reviews=reviews;
+    }
 
     public ArrayList<String> getVideos() {
         return videos;

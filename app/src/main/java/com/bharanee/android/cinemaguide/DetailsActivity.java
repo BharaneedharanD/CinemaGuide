@@ -22,66 +22,73 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailsActivity extends AppCompatActivity implements VideoAdapter.viewVideos {
-private TextView movie_Title;
-private ImageView movie_Poster;
-private TextView average_Score;
-private TextView release_Date;
-private TextView synopsis;
-private ImageView backdrop_image;
-private ProgressBar showProgress;
-private TextView reviews;
-private TextView currentPage;
-private TextView author;
-private ImageButton leftReview,rightReview;
-private RecyclerView rv_videos;
-private BackgroundTasks videoLoad;
-private VideoAdapter videoAdapter;
-private int currentPos=-1;
-private FloatingActionButton likeMovies;
-private boolean isLiked=false;
-private int movie_ID;
-MovieXtraDetails movieXtraDetails=null;
+    @BindView(R.id.tv_movie_name)  TextView movie_Title;
+    @BindView(R.id.image_poster) ImageView movie_Poster;
+    @BindView(R.id.left_review) ImageButton leftReview;
+    @BindView(R.id.right_review) ImageButton rightReview;
+    @BindView(R.id.tv_vote_average) TextView average_Score;
+    @BindView(R.id.tv_release_date) TextView release_Date;
+    @BindView(R.id.tv_synopsis) TextView synopsis;
+    @BindView(R.id.img_backdrop) ImageView backdrop_image;
+    @BindView(R.id.pb_load_status) ProgressBar showProgress;
+    @BindView(R.id.txt_reviews) TextView reviews;
+    @BindView(R.id.currentPage) TextView currentPage;
+    @BindView(R.id.author_name) TextView author;
+    @BindView(R.id.list_videos) RecyclerView rv_videos;
+    @BindView(R.id.fab_add_favorites) FloatingActionButton likeMovies;
+    private BackgroundTasks videoLoad;
+    private VideoAdapter videoAdapter;
+    private int currentPos=-1;
+    private boolean isLiked=false;
+    private int movie_ID;
+    MovieXtraDetails movieXtraDetails=null;
     NetworkUtils networkUtils=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        reviews=findViewById(R.id.txt_reviews);
-        movie_Title= findViewById(R.id.tv_movie_name);
-        movie_Poster= findViewById(R.id.image_poster);
-        leftReview=findViewById(R.id.left_review);
+        ButterKnife.bind(this);
         leftReview.setAlpha(0.4f);
-        rightReview=findViewById(R.id.right_review);
         rightReview.setAlpha(0.4f);
-        average_Score= findViewById(R.id.tv_vote_average);
-        release_Date= findViewById(R.id.tv_release_date);
-        currentPage=findViewById(R.id.currentPage);
-        showProgress=findViewById(R.id.pb_load_status);
-        backdrop_image=findViewById(R.id.img_backdrop);
-        author=findViewById(R.id.author_name);
         backdrop_image.setScaleType(ImageView.ScaleType.FIT_XY);
         movie_Poster.setScaleType(ImageView.ScaleType.FIT_START);
-        synopsis=findViewById(R.id.tv_synopsis);
         NetworkUtils.resetObject();
         networkUtils=NetworkUtils.getNetworkObject();
         Intent movieIntent=getIntent();
         movie_ID=movieIntent.getIntExtra(getString(R.string.MovieID),0);
-        new display_Data().execute(movie_ID);
-
         //Recycler View
-         rv_videos=findViewById(R.id.list_videos);
         GridLayoutManager layoutManager=new GridLayoutManager(DetailsActivity.this,1, LinearLayoutManager.HORIZONTAL,false);
         videoAdapter=new VideoAdapter(this);
+       if (savedInstanceState!=null){
+           MovieXtraDetails savedDetails=new MovieXtraDetails();
+           savedDetails.setBackdropImage(savedInstanceState.getString(getString(R.string.backdrop_image_url)));
+           savedDetails.setReleaseData(savedInstanceState.getString(getString(R.string.releaseDate)));
+           savedDetails.setSynopsis(savedInstanceState.getString(getString(R.string.synopsis)));
+           savedDetails.setAverageVote(savedInstanceState.getDouble(getString(R.string.AverageScore)));
+           savedDetails.setPosterImage(savedInstanceState.getString(getString(R.string.PosterPath)));
+           savedDetails.setMovieTitle(savedInstanceState.getString(getString(R.string.MovieTitle)));
+           savedDetails.setReviews(savedInstanceState.getStringArrayList(getString(R.string.reviews)));
+           ArrayList<String> videoPaths=savedInstanceState.getStringArrayList(getString(R.string.videosLists));
+           movieXtraDetails=savedDetails;
+           setdataDetails(movieXtraDetails);
+           videoAdapter.setData(videoPaths);
+       }else{
         videoLoad=new BackgroundTasks(DetailsActivity.this,movie_ID,videoAdapter);
         videoLoad.execute(movie_ID);
+        new display_Data().execute(movie_ID);
+
+       }
         rv_videos.setLayoutManager(layoutManager);
         rv_videos.setHasFixedSize(true);
         //videoAdapter.resetDate();
         rv_videos.setAdapter(videoAdapter);
-
         //Floating Action Button
-         likeMovies=findViewById(R.id.fab_add_favorites);
         isLiked=containsMovie(movie_ID);
         if (isLiked)
             likeMovies.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.colorAccent)) );
@@ -187,7 +194,10 @@ MovieXtraDetails movieXtraDetails=null;
         String releaseYear=movieXtraDetails.getReleaseData().split("-")[0];
         release_Date.setText(releaseYear);
         synopsis.setText(movieXtraDetails.getSynopsis());
-            new get_Reviews_Videos().execute(movie_ID);
+        if (movieXtraDetails.getReviews().size()==0 || movieXtraDetails.getReviews()==null)
+        new get_Reviews_Videos().execute(movie_ID);
+        else
+            setReviews(0);
 
     }
     class get_Reviews_Videos extends AsyncTask<Integer,Void,MovieXtraDetails>{
@@ -225,5 +235,17 @@ MovieXtraDetails movieXtraDetails=null;
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(getString(R.string.PosterPath),movieXtraDetails.getPosterImage());
+        outState.putString(getString(R.string.backdrop_image_url),movieXtraDetails.getBackdropImage());
+        outState.putString(getString(R.string.MovieTitle),movieXtraDetails.getMovieTitle());
+        outState.putString(getString(R.string.releaseDate),movieXtraDetails.getReleaseData());
+        outState.putDouble(getString(R.string.AverageScore),movieXtraDetails.getAverageVote());
+        outState.putString(getString(R.string.synopsis),movieXtraDetails.getSynopsis());
+        outState.putStringArrayList(getString(R.string.reviews),movieXtraDetails.getReviews());
+        outState.putStringArrayList(getString(R.string.videosLists),videoAdapter.videoURLs);
+    }
 }
 

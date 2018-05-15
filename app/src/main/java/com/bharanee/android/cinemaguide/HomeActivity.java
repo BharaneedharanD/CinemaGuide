@@ -11,41 +11,76 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class HomeActivity extends AppCompatActivity implements MovieAdapter.poster_click,LoaderManager.LoaderCallbacks<Cursor> {
-private RecyclerView rv_movies;
+
+@BindView(R.id.rv_movie_posters)  RecyclerView rv_movies;
 private MovieAdapter adapter;
 private String sort_type;
 private static final int FAVOURITES_LOADER_ID=101;
-    NetworkUtils networkobj=null;
+private NetworkUtils networkobj=null;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        ArrayList<Integer> ids=new ArrayList<Integer>();
+        ArrayList<String> poster_images=new ArrayList<String>();
+        for (MovieDetails movies:adapter.movielist){
+            ids.add(movies.getMovie_Id());
+            poster_images.add(movies.getPoster_Path());
+        }
+        outState.putIntegerArrayList(getString(R.string.MovieID),ids);
+        outState.putStringArrayList(getString(R.string.PosterPath),poster_images);
+        outState.putString("sort_type",sort_type);
+        outState.putInt("currentPage",networkobj.curr_page);
+        outState.putInt("lastPage",networkobj.final_page);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
          networkobj=NetworkUtils.getNetworkObject();
          sort_type=getResources().getString(R.string.top_rated);
-        rv_movies=findViewById(R.id.rv_movie_posters);
         GridLayoutManager layoutManager=new GridLayoutManager(HomeActivity.this,2);
-        new getData().execute(networkobj);
-        rv_movies.setLayoutManager(layoutManager);
-        rv_movies.setHasFixedSize(true);
         adapter=new MovieAdapter(this,HomeActivity.this);
         adapter.reset();
-        rv_movies.setAdapter(adapter);
+        if (savedInstanceState!=null){
+            String type=savedInstanceState.getString("sort_type");
+            ArrayList<Integer> mIds=savedInstanceState.getIntegerArrayList(getString(R.string.MovieID));
+            ArrayList<String> posterPaths=savedInstanceState.getStringArrayList(getString(R.string.PosterPath));
+            MovieDetails[] details=new MovieDetails[mIds.size()];
+            for (int i=0;i<mIds.size();i++){
+                MovieDetails m=new MovieDetails();
+                m.setMovie_Id(mIds.get(i));
+                m.setPoster_Path(posterPaths.get(i));
+                details[i]=m;
+            }
+            NetworkUtils.getNetworkObject().curr_page=savedInstanceState.getInt("currPage");
+            NetworkUtils.getNetworkObject().final_page=savedInstanceState.getInt("lastPage");
+            adapter.setData(details,type.equals("favourites"));
+        }else{
+        new getData().execute(networkobj);
+        }
+        rv_movies.setLayoutManager(layoutManager);
+        rv_movies.setHasFixedSize(true);
 
+        rv_movies.setAdapter(adapter);
+        rv_movies.addOnScrollListener(scrollListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (sort_type.equals("favourites"))
-            getLoaderManager().restartLoader(FAVOURITES_LOADER_ID,null,this);
-            rv_movies.addOnScrollListener(scrollListener);
+
+
     }
 
     private RecyclerView.OnScrollListener scrollListener=new RecyclerView.OnScrollListener() {
@@ -64,16 +99,10 @@ private static final int FAVOURITES_LOADER_ID=101;
     };
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        rv_movies.removeOnScrollListener(scrollListener);
-    }
-
-    /*@Override
     protected void onDestroy() {
         super.onDestroy();
-
-    }*/
+        rv_movies.removeOnScrollListener(scrollListener);
+    }
 
     private boolean lastitemdisplaying(RecyclerView rv_movies) {
     if (rv_movies.getAdapter().getItemCount()>0){
@@ -106,6 +135,7 @@ private static final int FAVOURITES_LOADER_ID=101;
 
             @Override
             public Cursor loadInBackground() {
+
                 try {
                     return getContentResolver().query(FavoriteMovieContract.FavoriteMovieEntry.CONTENT_URI,
                             null,
@@ -136,6 +166,7 @@ private static final int FAVOURITES_LOADER_ID=101;
                 i++;
             }while (data.moveToNext());
         }
+        getLoaderManager().destroyLoader(FAVOURITES_LOADER_ID);
         adapter.setData(movieArray,true);
     }
 
