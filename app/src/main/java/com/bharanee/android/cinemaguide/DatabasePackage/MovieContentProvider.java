@@ -1,10 +1,9 @@
-package com.bharanee.android.cinemaguide;
+package com.bharanee.android.cinemaguide.DatabasePackage;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;

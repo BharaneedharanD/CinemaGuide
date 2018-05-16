@@ -1,8 +1,8 @@
-package com.bharanee.android.cinemaguide;
+package com.bharanee.android.cinemaguide.Modal;
 
 import java.util.ArrayList;
 
-class MovieXtraDetails {
+public class MovieXtraDetails {
     public String getMovieTitle() {
         return movieTitle;
     }

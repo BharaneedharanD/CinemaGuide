@@ -1,7 +1,10 @@
-package com.bharanee.android.cinemaguide;
+package com.bharanee.android.cinemaguide.BackgroundAsyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+
+import com.bharanee.android.cinemaguide.Utilities.NetworkUtils;
+import com.bharanee.android.cinemaguide.AdapterClasses.VideoAdapter;
 
 import java.util.ArrayList;
 
@@ -19,7 +22,7 @@ public class BackgroundTasks extends AsyncTask<Integer,Void,ArrayList<String>>{
 
         @Override
         protected ArrayList<String> doInBackground(Integer... integers) {
-            movieVideoKeys=NetworkUtils.getVideos(movieId,context);
+            movieVideoKeys= NetworkUtils.getVideos(movieId,context);
             return movieVideoKeys;
         }
 

@@ -1,4 +1,4 @@
-package com.bharanee.android.cinemaguide;
+package com.bharanee.android.cinemaguide.AdapterClasses;
 
 import android.content.Context;
 
@@ -7,6 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.bharanee.android.cinemaguide.Modal.MovieDetails;
+import com.bharanee.android.cinemaguide.R;
+import com.bharanee.android.cinemaguide.Utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,7 +26,7 @@ private final poster_click click_handler;
         resourceContext=context;
     }
 
-    interface poster_click{
+    public interface poster_click{
      void on_movie_poster_clicked(int index);
 }
 

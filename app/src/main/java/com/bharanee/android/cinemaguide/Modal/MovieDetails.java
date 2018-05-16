@@ -1,4 +1,4 @@
-package com.bharanee.android.cinemaguide;
+package com.bharanee.android.cinemaguide.Modal;
 
 public class MovieDetails {
     private String poster_Path;

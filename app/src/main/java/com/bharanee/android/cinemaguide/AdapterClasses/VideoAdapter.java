@@ -1,4 +1,4 @@
-package com.bharanee.android.cinemaguide;
+package com.bharanee.android.cinemaguide.AdapterClasses;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bharanee.android.cinemaguide.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
 public ArrayList<String> videoURLs=new ArrayList<String>();
 public  viewVideos videosInterface;
- interface viewVideos{
+ public interface viewVideos{
      void onclick(int index);
 }
 //private Context context;

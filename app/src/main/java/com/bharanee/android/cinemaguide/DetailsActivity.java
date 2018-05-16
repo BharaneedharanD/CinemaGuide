@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,6 +19,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bharanee.android.cinemaguide.AdapterClasses.VideoAdapter;
+import com.bharanee.android.cinemaguide.BackgroundAsyncTasks.BackgroundTasks;
+import com.bharanee.android.cinemaguide.DatabasePackage.FavoriteMovieContract;
+import com.bharanee.android.cinemaguide.Modal.MovieXtraDetails;
+import com.bharanee.android.cinemaguide.Utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -103,7 +107,7 @@ public class DetailsActivity extends AppCompatActivity implements VideoAdapter.v
                 values.put(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_POSTER_PATH,movieXtraDetails.getPosterImage());
                 Uri uri=getContentResolver().insert(FavoriteMovieContract.FavoriteMovieEntry.CONTENT_URI,values);
                 if (uri.toString().equals(FavoriteMovieContract.FavoriteMovieEntry.CONTENT_URI+"/"+movie_ID))
-                Toast.makeText(DetailsActivity.this,"Added to Favourites",Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailsActivity.this,getString(R.string.fav_toast_add),Toast.LENGTH_SHORT).show();
                 isLiked=true;
                     likeMovies.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(DetailsActivity.this,R.color.colorAccent)) );
                 }
@@ -114,7 +118,7 @@ public class DetailsActivity extends AppCompatActivity implements VideoAdapter.v
                     uriDelete=uriDelete.buildUpon().appendPath(movie).build();
                     int result=getContentResolver().delete(uriDelete,null,null);
                     if (result!=0)
-                    {Toast.makeText(DetailsActivity.this,"Removed from Favourites ",Toast.LENGTH_SHORT).show();
+                    {Toast.makeText(DetailsActivity.this,getString(R.string.fav_toast_remove),Toast.LENGTH_SHORT).show();
                     isLiked=false;
                     likeMovies.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(DetailsActivity.this,R.color.grey)) );
                     }

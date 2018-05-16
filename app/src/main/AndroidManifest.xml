@@ -26,7 +26,7 @@
         </activity>
         <provider
             android:authorities="com.bharanee.android.cinemaguide"
-            android:name="com.bharanee.android.cinemaguide.MovieContentProvider"
+            android:name="com.bharanee.android.cinemaguide.DatabasePackage.MovieContentProvider"
             android:exported="false"
             />
     </application>

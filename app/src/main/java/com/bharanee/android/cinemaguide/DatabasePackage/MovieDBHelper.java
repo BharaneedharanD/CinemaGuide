@@ -1,8 +1,10 @@
-package com.bharanee.android.cinemaguide;
+package com.bharanee.android.cinemaguide.DatabasePackage;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.bharanee.android.cinemaguide.DatabasePackage.FavoriteMovieContract;
 
 public class MovieDBHelper extends SQLiteOpenHelper {
     private static int version=2;
@@ -16,7 +18,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-final String createQuery="CREATE TABLE "+FavoriteMovieContract.FavoriteMovieEntry.TABLE_NAME
+final String createQuery="CREATE TABLE "+ FavoriteMovieContract.FavoriteMovieEntry.TABLE_NAME
         +" ( "+ FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_ID+" INTEGER PRIMARY KEY , "
         + FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_NAME+" TEXT NOT NULL ,"
         + FavoriteMovieContract.FavoriteMovieEntry.COLUMN_POSTER_PATH +" TEXT NOT NULL );";

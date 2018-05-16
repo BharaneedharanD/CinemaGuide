@@ -1,6 +1,10 @@
-package com.bharanee.android.cinemaguide;
+package com.bharanee.android.cinemaguide.Utilities;
 
 import android.content.Context;
+
+import com.bharanee.android.cinemaguide.Modal.MovieDetails;
+import com.bharanee.android.cinemaguide.Modal.MovieXtraDetails;
+import com.bharanee.android.cinemaguide.R;
 
 import org.json.JSONException;
 import java.io.IOException;

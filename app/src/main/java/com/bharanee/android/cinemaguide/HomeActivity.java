@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,8 +12,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
+import com.bharanee.android.cinemaguide.AdapterClasses.MovieAdapter;
+import com.bharanee.android.cinemaguide.BackgroundAsyncTasks.GetData;
+import com.bharanee.android.cinemaguide.DatabasePackage.FavoriteMovieContract;
+import com.bharanee.android.cinemaguide.Modal.MovieDetails;
+import com.bharanee.android.cinemaguide.Utilities.NetworkUtils;
 
+import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -25,14 +28,16 @@ public class HomeActivity extends AppCompatActivity implements MovieAdapter.post
 @BindView(R.id.rv_movie_posters)  RecyclerView rv_movies;
 private MovieAdapter adapter;
 private String sort_type;
+private GetData getDataTask;
 private static final int FAVOURITES_LOADER_ID=101;
 //private NetworkUtils networkobj=null;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        ArrayList<Integer> ids=new ArrayList<Integer>();
-        ArrayList<String> poster_images=new ArrayList<String>();
+        ArrayList<Integer> ids=new ArrayList<>();
+        ArrayList<String> poster_images=new ArrayList<>();
+        if (adapter==null)return;
         for (MovieDetails movies:adapter.movielist){
             ids.add(movies.getMovie_Id());
             poster_images.add(movies.getPoster_Path());
@@ -40,7 +45,7 @@ private static final int FAVOURITES_LOADER_ID=101;
         outState.putIntegerArrayList(getString(R.string.MovieID),ids);
         outState.putStringArrayList(getString(R.string.PosterPath),poster_images);
         outState.putString(getString(R.string.sort_type),sort_type);
-        outState.putInt(getString(R.string.currentPage),NetworkUtils.curr_page);
+        outState.putInt(getString(R.string.currentPage), NetworkUtils.curr_page);
         outState.putInt(getString(R.string.lastPage),NetworkUtils.final_page);
     }
 
@@ -57,7 +62,7 @@ private static final int FAVOURITES_LOADER_ID=101;
         adapter=new MovieAdapter(this,HomeActivity.this);
         adapter.reset();
         if (savedInstanceState!=null){
-            String type=savedInstanceState.getString(getString(R.string.sort_type));
+            sort_type=savedInstanceState.getString(getString(R.string.sort_type));
             ArrayList<Integer> mIds=savedInstanceState.getIntegerArrayList(getString(R.string.MovieID));
             ArrayList<String> posterPaths=savedInstanceState.getStringArrayList(getString(R.string.PosterPath));
             MovieDetails[] details=new MovieDetails[mIds.size()];
@@ -69,9 +74,13 @@ private static final int FAVOURITES_LOADER_ID=101;
             }
             NetworkUtils.curr_page=savedInstanceState.getInt(getString(R.string.currentPage));
             NetworkUtils.final_page=savedInstanceState.getInt(getString(R.string.lastPage));
-            adapter.setData(details,type.equals(getString(R.string.favourites)));
+            adapter.setData(details,sort_type.equals(getString(R.string.favourites)));
+            details=null;
         }else{
-        new getData().execute();
+            if (getDataTask!=null)
+                getDataTask=null;
+                getDataTask=new GetData(sort_type,HomeActivity.this,adapter);
+                getDataTask.execute();
         }
         rv_movies.setLayoutManager(layoutManager);
         rv_movies.setHasFixedSize(true);
@@ -92,10 +101,14 @@ private static final int FAVOURITES_LOADER_ID=101;
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             if (dy<0 || sort_type.equals(getString(R.string.favourites)))return;
-            if (lastitemdisplaying(rv_movies)&& NetworkUtils.curr_page<=NetworkUtils.final_page)
+            if (isPageLoaded(rv_movies)&& NetworkUtils.curr_page<=NetworkUtils.final_page)
             {
                 NetworkUtils.curr_page++;
-            new getData().execute();return;
+                if (getDataTask!=null)
+                    getDataTask=null;
+                getDataTask=new GetData(sort_type,HomeActivity.this,adapter);
+                getDataTask.execute();
+                return;
             }
 
         }
@@ -107,7 +120,7 @@ private static final int FAVOURITES_LOADER_ID=101;
         rv_movies.removeOnScrollListener(scrollListener);
     }
 
-    private boolean lastitemdisplaying(RecyclerView rv_movies) {
+    private boolean isPageLoaded(RecyclerView rv_movies) {
     if (rv_movies.getAdapter().getItemCount()>0){
         int lastVisibleItemPosition=( (GridLayoutManager) rv_movies.getLayoutManager()).findLastVisibleItemPosition();
         if (lastVisibleItemPosition!=RecyclerView.NO_POSITION && lastVisibleItemPosition==rv_movies.getAdapter().getItemCount()-1)
@@ -178,20 +191,6 @@ private static final int FAVOURITES_LOADER_ID=101;
         adapter.reset();
     }
 ///////////////////////////////////////////////////////////////////////////////
-    class getData extends AsyncTask<Void,Void,MovieDetails[]>{
-
-    @Override
-    protected MovieDetails[] doInBackground(Void... voids) {
-        MovieDetails[] parsed=NetworkUtils.getJson(sort_type,HomeActivity.this);
-        return parsed;
-    }
-
-    @Override
-        protected void onPostExecute(MovieDetails[] strings) {
-
-            adapter.setData(strings,false);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -208,7 +207,10 @@ private static final int FAVOURITES_LOADER_ID=101;
                 {
                     adapter.reset();
                     sort_type=getResources().getString(R.string.top_rated);
-                    new getData().execute();
+                    if (getDataTask!=null)
+                        getDataTask=null;
+                    getDataTask=new GetData(sort_type,HomeActivity.this,adapter);
+                    getDataTask.execute();
                 }
                 break;
             case R.id.popular_menu_id:
@@ -216,7 +218,10 @@ private static final int FAVOURITES_LOADER_ID=101;
                 {
                     adapter.reset();
                     sort_type=getResources().getString(R.string.popular);
-                    new getData().execute();
+                    if (getDataTask!=null)
+                        getDataTask=null;
+                    getDataTask=new GetData(sort_type,HomeActivity.this,adapter);
+                    getDataTask.execute();
                 }
                 break;
             case R.id.favourite_menu_id:

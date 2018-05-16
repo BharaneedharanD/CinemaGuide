@@ -1,6 +1,8 @@
-package com.bharanee.android.cinemaguide;
-
+package com.bharanee.android.cinemaguide.Utilities;
 import android.content.Context;
+import com.bharanee.android.cinemaguide.Modal.MovieDetails;
+import com.bharanee.android.cinemaguide.Modal.MovieXtraDetails;
+import com.bharanee.android.cinemaguide.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,12 +36,12 @@ public class JsonParserUtil {
     public MovieXtraDetails returnDetails(String next, Context context) throws JSONException {
         MovieXtraDetails movieObject=new MovieXtraDetails();
         JSONObject jsonObject=new JSONObject(next);
-        movieObject.setMovieTitle(jsonObject.getString(context.getResources().getString(R.string.MovieTitle)));
+        movieObject.setMovieTitle(jsonObject.getString(context.getString(R.string.MovieTitle)));
         movieObject.setPosterImage(jsonObject.getString(context.getResources().getString(R.string.PosterPath)));
-        movieObject.setAverageVote(jsonObject.getDouble(context.getResources().getString(R.string.AverageScore)));
-        movieObject.setSynopsis(jsonObject.getString(context.getResources().getString(R.string.Synopsis)));
-        movieObject.setBackdropImage(jsonObject.getString("backdrop_path"));
-        movieObject.setReleaseData(jsonObject.getString(context.getResources().getString(R.string.releaseDate)));
+        movieObject.setAverageVote(jsonObject.getDouble(context.getString(R.string.AverageScore)));
+        movieObject.setSynopsis(jsonObject.getString(context.getString(R.string.Synopsis)));
+        movieObject.setBackdropImage(jsonObject.getString(context.getString(R.string.backdrop_path)));
+        movieObject.setReleaseData(jsonObject.getString(context.getString(R.string.releaseDate)));
 
         //set all trailers video paths
 

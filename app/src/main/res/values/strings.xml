@@ -8,6 +8,9 @@
     <string name="top_rated">top_rated</string>
     <string name="popular">popular</string>
     <string name="results">results</string>
+    <string name="fav_toast_add">Added to Favourites</string>
+    <string name="fav_toast_remove">Removed from Favourites</string>
+    <string name="backdrop_path">backdrop_path</string>
     <string name="PosterPath">poster_path</string>
     <string name="MovieID">movie_Id</string>
     <string name="ID">id</string>

@@ -1,4 +1,4 @@
-package com.bharanee.android.cinemaguide;
+package com.bharanee.android.cinemaguide.DatabasePackage;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
