@@ -4,6 +4,7 @@ Udacity android nano degree project - II
 This is the final version of Movie App part of uadacity android nanodegree program -I
 
 The application will perform following operations:
+
 •	Present the user with a grid arrangement of movie posters upon launch.
 •	Allow your user to change sort order via a setting:
 •	The sort order can be by most popular or by highest-rated
@@ -16,8 +17,12 @@ The application will perform following operations:
 •	Allow users to mark a movie as a favorite in the details view by tapping a button(star).
 •	Create a database to store the names and ids of the user's favorite movies (and optionally, the rest of the information needed to display their favorites collection while offline).
 •	You’ll modify the existing sorting criteria for the main view to include an additional pivot to show their favorites collection.
+<p align="center">
+  <img src="https://github.com/BharaneedharanD/CinemaGuide/blob/master/Screenshot_20180612-232241.png" width="150"/>
+ </p>
 
-Skills used in the project
+Skills used in the project:
+
 •	Process GET request and Response from the internet.
 •	Process JSON response from internet.
 •	Create and maintain a SQLite DB locally.
@@ -25,5 +30,9 @@ Skills used in the project
 •	Implicit intents to view trailers in Youtube APP or Web.
 •	Other best practices while developing android apps. 
 
+<p align="center">
+  <img src="https://github.com/BharaneedharanD/CinemaGuide/blob/master/Screenshot_20180612-232400.png" width="150"/>
+  <img src="https://github.com/BharaneedharanD/CinemaGuide/blob/master/Screenshot_20180612-232522.png" width="300"/> 
+ </p>
 
 All icons are taken from Flat icons https://www.flaticon.com/
